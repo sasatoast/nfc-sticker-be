@@ -13,6 +13,9 @@ development:
 test:
   <<: *default
   database: app_test
+  username: root
+  password: MYSQL_ROOT_PASSWORD
+  host: db
 
 production:
   <<: *default

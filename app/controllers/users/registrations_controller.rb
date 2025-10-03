@@ -20,4 +20,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       errors: resource.errors.full_messages
     }, status: :unprocessable_entity
   end
+
+  def sign_up_params
+     params.require(:user).permit(:email, :name, :password, :password_confirmation)
+  end
 end

@@ -6,15 +6,15 @@ class Users::SessionsController < Devise::SessionsController
     def create
       super do |user|
         Rails.logger.info "==== WARDEN ENV CHECK ===="
-        Rails.logger.info request.env['warden'].inspect
-        Rails.logger.info request.env['rack.session'].inspect
+        Rails.logger.info request.env["warden"].inspect
+        Rails.logger.info request.env["rack.session"].inspect
       end
     end
 
     private
 
     def respond_with(resource, _opts = {})
-      render json: { message: 'Logged in successfully.', user: resource }, status: :ok
+      render json: { message: "Logged in successfully.", user: resource }, status: :ok
     end
 
     def respond_to_on_destroy
@@ -26,6 +26,6 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     def log_out_failure
-      render json: { message: "Logged out failure."}, status: :unauthorized
+      render json: { message: "Logged out failure." }, status: :unauthorized
     end
 end

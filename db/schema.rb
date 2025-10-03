@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_042228) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_053558) do
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
@@ -31,5 +31,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_042228) do
     t.string "share_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["share_id"], name: "index_users_on_share_id", unique: true
   end
 end

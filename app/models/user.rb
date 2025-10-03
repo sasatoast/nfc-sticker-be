@@ -14,5 +14,4 @@ class User < ApplicationRecord
       break unless User.exists?(share_id: self.share_id)
     end
   end
-
 end

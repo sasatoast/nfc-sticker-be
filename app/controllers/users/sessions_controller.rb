@@ -1,16 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
     include RackSessionFix
     respond_to :json
-
-
-    def create
-      super do |user|
-        Rails.logger.info "==== WARDEN ENV CHECK ===="
-        Rails.logger.info request.env["warden"].inspect
-        Rails.logger.info request.env["rack.session"].inspect
-      end
-    end
-
     private
 
     def respond_with(resource, _opts = {})

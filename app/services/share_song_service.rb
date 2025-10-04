@@ -16,4 +16,13 @@ class ShareSongService
         artist_name: song.artist&.name
       }
   end
+
+  def increment_shared_count
+    shared_count = SharedCount.find_or_initialize_by(
+      song_id: @song_id,
+      share_id: @share_id
+      )
+    shared_count.count += 1
+    shared_count.save
+  end
 end

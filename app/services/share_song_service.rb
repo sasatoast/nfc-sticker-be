@@ -13,7 +13,8 @@ class ShareSongService
         picture_url: song.picture_url,
         spotify_url: song.spotify_url,
         apple_url: song.apple_url,
-        artist_name: song.artist&.name
+        artist_name: song.artist&.name,
+        artist_id: song.artist_id
       }
   end
 

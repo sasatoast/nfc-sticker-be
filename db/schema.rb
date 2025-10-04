@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_152428) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_162151) do
   create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "picture_url"
     t.string "sporify_url"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152428) do
     t.string "homepage_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

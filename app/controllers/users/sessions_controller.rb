@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
     include RackSessionFix
-    skip_before_action :authenticate_user!, only: [:create]
+    skip_before_action :authenticate_user!, only: [ :create ]
     respond_to :json
     private
 

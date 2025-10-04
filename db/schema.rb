@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_060941) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_152428) do
   create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "picture_url"
     t.string "sporify_url"
@@ -26,6 +26,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_060941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_jwt_denylist_on_jti", unique: true
+  end
+
+  create_table "shared_counts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "share_id", null: false
+    t.bigint "song_id", null: false
+    t.integer "count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["share_id", "song_id"], name: "index_shared_counts_on_share_id_and_song_id", unique: true
+    t.index ["song_id"], name: "index_shared_counts_on_song_id"
   end
 
   create_table "songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -55,5 +65,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_060941) do
     t.index ["share_id"], name: "index_users_on_share_id", unique: true
   end
 
+  add_foreign_key "shared_counts", "songs"
   add_foreign_key "songs", "artists"
 end

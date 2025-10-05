@@ -3,7 +3,7 @@ class Songs::SongsController < ApplicationController
     song_data = PlaySongService.call(
       song_id: params[:id],
       share_id: params[:share_id],
-      user_id: current_user.id
+      user_id: current_user&.id
     )
     if song_data
       render json: song_data, status: :ok

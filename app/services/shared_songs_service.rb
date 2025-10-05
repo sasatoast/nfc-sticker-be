@@ -11,7 +11,7 @@ class SharedSongsService
   def fetch_shared_songs_by_user_id(user_id)
     shared_songs_ids = UsersSharedSong.where(user_id: user_id).pluck(:song_id)
     songs_with_artist = Song.where(id: shared_songs_ids).includes(:artist)
-    return songs_with_artist.map do |song|
+    songs_with_artist.map do |song|
       {
         song_id: song.id,
         song_name: song.name,

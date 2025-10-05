@@ -1,6 +1,6 @@
 class FetchSongService
   include Callable
-    def initialize(song_id:,share_id: nil)
+    def initialize(song_id:, share_id: nil)
       @song_id = song_id
       @share_id = share_id
     end

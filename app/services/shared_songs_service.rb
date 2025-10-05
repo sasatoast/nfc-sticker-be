@@ -5,8 +5,7 @@ class SharedSongsService
   end
 
   def call
-    song_data = fetch_shared_songs_by_user_id(@user_id)
-    song_data
+    fetch_shared_songs_by_user_id(@user_id)
   end
 
   def fetch_shared_songs_by_user_id(user_id)

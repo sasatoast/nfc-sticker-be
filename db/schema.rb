@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_162151) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_05_025430) do
   create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "picture_url"
-    t.string "sporify_url"
+    t.string "spotify_url"
     t.string "apple_url"
     t.string "homepage_url"
     t.datetime "created_at", null: false

@@ -15,7 +15,7 @@ puts 'Creating artists...'
 artist1 = Artist.create!(
   name: 'Official髭男dism', # nameカラムが存在すると仮定
   picture_url: 'https://example.com/artists/hige/profile.jpg',
-  sporify_url: 'https://open.spotify.com/artist/0_uIqXfJvWB4zl1hPAi4hB',
+  spotify_url: 'https://open.spotify.com/artist/0_uIqXfJvWB4zl1hPAi4hB',
   apple_url: 'https://music.apple.com/jp/artist/official髭男dism/10 Official髭男dism',
   homepage_url: 'https://higedan.com/'
 )
@@ -23,7 +23,7 @@ artist1 = Artist.create!(
 artist2 = Artist.create!(
   name: 'YOASOBI', # nameカラムが存在すると仮定
   picture_url: 'https://example.com/artists/yoasobi/profile.jpg',
-  sporify_url: 'https://open.spotify.com/artist/64tJ2EAv1R6UaZqc4iOCyj',
+  spotify_url: 'https://open.spotify.com/artist/64tJ2EAv1R6UaZqc4iOCyj',
   apple_url: 'https://music.apple.com/jp/artist/yoasobi/1487630793',
   homepage_url: 'https://www.yoasobi-music.jp/'
 )
@@ -31,7 +31,7 @@ artist2 = Artist.create!(
 artist3 = Artist.create!(
   name: 'Vaundy', # nameカラムが存在すると仮定
   picture_url: 'https://example.com/artists/vaundy/profile.jpg',
-  sporify_url: 'https://open.spotify.com/artist/2IUl3m1H1EQ7QfOKzLOLsq',
+  spotify_url: 'https://open.spotify.com/artist/2IUl3m1H1EQ7QfOKzLOLsq',
   apple_url: 'https://music.apple.com/jp/artist/vaundy/1473415255',
   homepage_url: 'https://vaundy.jp/'
 )

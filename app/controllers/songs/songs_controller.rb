@@ -7,7 +7,7 @@ class Songs::SongsController < ApplicationController
     if song_data
       render json: song_data, status: :ok
     else
-      render json: { error: 'Song not found' }, status: :not_found
+      render json: { error: "Song not found" }, status: :not_found
     end
   end
 end

@@ -1,8 +1,9 @@
 class PlaySongService
   include Callable
+  # require 'pry-rails'
     def initialize(song_id:, user_id: nil, share_id: nil)
-      @song_id = song_id,
-      @user_id = user_id,
+      @song_id = song_id
+      @user_id = user_id
       @share_id = share_id
     end
 
@@ -15,6 +16,7 @@ class PlaySongService
       if @user_id.present?
         save_shared_song
       end
+      # binding.irb
       song
     end
 

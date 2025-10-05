@@ -1,6 +1,6 @@
 class PlaySongService
   include Callable
-  # require 'pry-rails'
+    # require 'pry-rails'
     def initialize(song_id:, user_id: nil, share_id: nil)
       @song_id = song_id
       @user_id = user_id

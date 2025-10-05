@@ -1,5 +1,5 @@
 class Songs::SongsController < ApplicationController
-  before_action :authenticate_user!, only: [:show_shared_song]
+  before_action :authenticate_user!, only: [ :show_shared_song ]
   def show
     song_data = PlaySongService.call(
       song_id: params[:id],
@@ -20,7 +20,7 @@ class Songs::SongsController < ApplicationController
     if shared_song_data.present?
       render json: shared_song_data, status: :ok
     else
-      render json: { shared_song_data: [], "message": 共有された曲はまだありません}, status: :ok
+      render json: { shared_song_data: [], "message": 共有された曲はまだありません }, status: :ok
     end
   end
 end

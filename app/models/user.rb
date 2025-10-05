@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
   before_create :generate_share_id
 
+  has_many :UsersSharedSong
   private
 
   def generate_share_id

@@ -1,15 +1,20 @@
 class PlaySongService
   include Callable
-    def initialize(song_id:, share_id: nil)
-      @song_id = song_id
+    def initialize(song_id:, user_id: nil, share_id: nil)
+      @song_id = song_id,
+      @user_id = user_id,
       @share_id = share_id
     end
 
     def call
       song = fetch_song_and_artist_name(@song_id)
       return nil unless song
-      increment_shared_count if @share_id.present?
-
+      if @share_id.present?
+        increment_shared_count
+      end
+      if @user_id.present?
+        save_shared_song
+      end
       song
     end
 
@@ -37,5 +42,11 @@ class PlaySongService
       shared_count.save
     end
 
-    
+    def save_shared_song
+      shared_song = UsersSharedSong.find_or_initialize_by(
+        user_id: @user_id,
+        song_id: @song_id
+        )
+      shared_song.save
+    end
 end

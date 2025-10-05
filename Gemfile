@@ -42,6 +42,7 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  gem "pry-rails"
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
@@ -49,5 +50,3 @@ end
 gem "devise", "~> 4.9"
 
 gem "devise-jwt", "~> 0.12.1"
-
-gem "pry-rails"

@@ -13,6 +13,7 @@ class FetchSongService
       song
     end
 
+    private
     def fetch_song_and_artist_name(song_id)
       song = Song.includes(:artist).find_by(id: song_id)
       return nil unless song

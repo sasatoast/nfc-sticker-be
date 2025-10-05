@@ -9,4 +9,5 @@ Rails.application.routes.draw do
         registrations: "users/registrations"
       }
       get "player/songs/:id", to: "songs/songs#show"
+      get "users/shared/songs", to: "songs/songs#show_shared_song"
 end

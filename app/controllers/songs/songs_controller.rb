@@ -1,6 +1,6 @@
 class Songs::SongsController < ApplicationController
   def show
-    song_data = FetchSongService.call(
+    song_data = PlaySongService.call(
       song_id: params[:id],
       share_id: params[:share_id]
     )

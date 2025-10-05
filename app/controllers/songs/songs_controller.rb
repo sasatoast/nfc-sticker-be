@@ -1,8 +1,9 @@
 class Songs::SongsController < ApplicationController
   def show
-    song_data = FetchSongService.call(
+    song_data = PlaySongService.call(
       song_id: params[:id],
-      share_id: params[:share_id]
+      share_id: params[:share_id],
+      user_id: current_user&.id
     )
     if song_data
       render json: song_data, status: :ok

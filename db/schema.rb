@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_05_025430) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_05_072935) do
   create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "picture_url"
     t.string "spotify_url"
@@ -66,6 +66,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_05_025430) do
     t.index ["share_id"], name: "index_users_on_share_id", unique: true
   end
 
+  create_table "users_shared_songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "song_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id"], name: "index_users_shared_songs_on_song_id"
+    t.index ["user_id"], name: "index_users_shared_songs_on_user_id"
+  end
+
   add_foreign_key "shared_counts", "songs"
   add_foreign_key "songs", "artists"
+  add_foreign_key "users_shared_songs", "songs"
+  add_foreign_key "users_shared_songs", "users"
 end

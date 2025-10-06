@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_061808) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_06_070321) do
   create_table "artists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "picture_url"
     t.string "spotify_url"
@@ -85,12 +85,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_061808) do
   end
 
   create_table "users_songs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "users_id", null: false
-    t.bigint "songs_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "song_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["songs_id"], name: "index_users_songs_on_songs_id"
-    t.index ["users_id"], name: "index_users_songs_on_users_id"
+    t.index ["song_id"], name: "index_users_songs_on_song_id"
+    t.index ["user_id"], name: "index_users_songs_on_user_id"
   end
 
   add_foreign_key "shared_counts", "songs"
@@ -98,6 +98,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_061808) do
   add_foreign_key "songs_passwords", "songs"
   add_foreign_key "users_shared_songs", "songs"
   add_foreign_key "users_shared_songs", "users"
-  add_foreign_key "users_songs", "songs", column: "songs_id"
-  add_foreign_key "users_songs", "users", column: "users_id"
+  add_foreign_key "users_songs", "songs"
+  add_foreign_key "users_songs", "users"
 end

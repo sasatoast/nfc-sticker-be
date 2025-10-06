@@ -1,4 +1,4 @@
 class SongsPassword < ApplicationRecord
   has_secure_password
-  belongs_to :songs
+  belongs_to :song
 end

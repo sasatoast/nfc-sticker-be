@@ -26,8 +26,9 @@ class Songs::SongsController < ApplicationController
   end
 
   def register_sharable_song
+    puts current_user.id
     status, result = ShareSongService.call(
-      user_id: current_user.id,
+      user_id: current_user&.id,
       song_id: params[:song_id],
       password: params[:password]
     )

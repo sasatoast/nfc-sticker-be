@@ -1,4 +1,5 @@
 class Songs::SongsController < ApplicationController
+  include Devise::Controllers::Helpers
   before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song ]
   # あとでここにcreate_song追加
   def show

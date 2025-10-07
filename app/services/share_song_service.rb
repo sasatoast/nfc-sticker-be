@@ -1,8 +1,8 @@
 class ShareSongService
   include Callable
   def initialize(user_id:, song_id:, password:)
-      @user_id = user_id,
-      @song_id = song_id,
+      @user_id = user_id
+      @song_id = song_id
       @password = password
   end
 

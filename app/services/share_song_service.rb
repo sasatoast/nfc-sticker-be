@@ -19,11 +19,4 @@ class ShareSongService
         [ :error, :wrong_password ]
       end
   end
-
-  def self.create_password(song)
-    SongsPassword.create!(
-      song_id: song.id,
-      password: SecureRandom.hex(4)
-    )
-  end
 end

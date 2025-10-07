@@ -37,4 +37,21 @@ class Songs::SongsController < ApplicationController
       render json: { error_code: result }
     end
   end
+
+  def create_song
+    status, result = CreateSongWithPasswordService.call(
+      name: params[:name],
+      source_url: params[:source_url],
+      picture_url: params[:picture_url],
+      spotify_url: params[:spotify_url],
+      apple_url: params[:apple_url],
+      artist_name: params[:artist_name]
+    )
+    case status
+    when :ok
+      render json: { data: result }
+    when :error
+      render json: { data: result }
+    end
+  end
 end

@@ -1,5 +1,7 @@
 class Songs::SongsController < ApplicationController
-  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song, :create_song]
+  include Devise::Controllers::Helpers
+  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song ]
+  # あとでここにcreate_song追加
   def show
     song_data = PlaySongService.call(
       song_id: params[:id],
@@ -25,8 +27,9 @@ class Songs::SongsController < ApplicationController
   end
 
   def register_sharable_song
+    puts current_user.id
     status, result = ShareSongService.call(
-      user_id: current_user.id,
+      user_id: current_user&.id,
       song_id: params[:song_id],
       password: params[:password]
     )

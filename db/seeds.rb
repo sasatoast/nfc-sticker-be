@@ -39,52 +39,59 @@ artist3 = Artist.create!(
 puts "#{Artist.count} artists created."
 
 # --- 楽曲の作成 ---
-puts 'Creating songs...'
+songs = [
+  {
+    name: "Pretender",
+    source_url: "https://storage.example.com/songs/pretender.mp3",
+    picture_url: "https://example.com/songs/pretender/jacket.jpg",
+    spotify_url: "https://open.spotify.com/track/15n0n0gT5b6d5g4g3f4g3g",
+    apple_url: "https://music.apple.com/jp/album/pretender/1462432842?i=1462432845",
+    artist_name: artist1.name
+  },
+  {
+    name: "Subtitle",
+    source_url: "https://storage.example.com/songs/subtitle.mp3",
+    picture_url: "https://example.com/songs/subtitle/jacket.jpg",
+    spotify_url: "https://open.spotify.com/track/6DbkL0e4Gk3h4b4b4g3b4g",
+    apple_url: "https://music.apple.com/jp/album/subtitle/1648216335?i=1648216336",
+    artist_name: artist1.name
+  },
+  {
+    name: "夜に駆ける",
+    source_url: "https://storage.example.com/songs/yorunikakeru.mp3",
+    picture_url: "https://example.com/songs/yorunikakeru/jacket.jpg",
+    spotify_url: "https://open.spotify.com/track/3g3g3g3g3g3g3g3g3g3g3g",
+    apple_url: "https://music.apple.com/jp/album/夜に駆ける/1492477610?i=1492477611",
+    artist_name: artist2.name
+  },
+  {
+    name: "アイドル",
+    source_url: "https://storage.example.com/songs/idol.mp3",
+    picture_url: "https://example.com/songs/idol/jacket.jpg",
+    spotify_url: "https://open.spotify.com/track/1g1g1g1g1g1g1g1g1g1g1g",
+    apple_url: "https://music.apple.com/jp/album/アイドル/1680292736?i=1680292737",
+    artist_name: artist2.name
+  },
+  {
+    name: "怪獣の花唄",
+    source_url: "https://storage.example.com/songs/kaiju.mp3",
+    picture_url: "https://example.com/songs/kaiju/jacket.jpg",
+    spotify_url: "https://open.spotify.com/track/2g2g2g2g2g2g2g2g2g2g2g",
+    apple_url: "https://music.apple.com/jp/album/怪獣の花唄/1512474135?i=1512474136",
+    artist_name: artist3.name
+  }
+]
 
-Song.SongsController.add_song!(
-  name: 'Pretender',
-  source_url: 'https://storage.example.com/songs/pretender.mp3',
-  picture_url: 'https://example.com/songs/pretender/jacket.jpg',
-  spotify_url: 'https://open.spotify.com/track/15n0n0gT5b6d5g4g3f4g3g',
-  apple_url: 'https://music.apple.com/jp/album/pretender/1462432842?i=1462432845',
-  artist_name: artist1.name # artist_idを直接指定する代わりに、オブジェクトを渡すのがRails流です
-)
+songs.each do |song_data|
+  status, result = CreateSongWithPasswordService.call(**song_data)
 
-Song.SongsController.add_song!(
-  name: 'Subtitle',
-  source_url: 'https://storage.example.com/songs/subtitle.mp3',
-  picture_url: 'https://example.com/songs/subtitle/jacket.jpg',
-  spotify_url: 'https://open.spotify.com/track/6DbkL0e4Gk3h4b4b4g3b4g',
-  apple_url: 'https://music.apple.com/jp/album/subtitle/1648216335?i=1648216336',
-  artist: artist1.name
-)
+  if status == :ok
+    puts "#{song_data[:name]} 登録完了 → パスワード: #{result}"
+  else
+    puts "#{song_data[:name]} 登録失敗: #{result.join(', ')}"
+  end
+end
 
-Song.SongsController.add_song!(
-  name: '夜に駆ける',
-  source_url: 'https://storage.example.com/songs/yorunikakeru.mp3',
-  picture_url: 'https://example.com/songs/yorunikakeru/jacket.jpg',
-  spotify_url: 'https://open.spotify.com/track/3g3g3g3g3g3g3g3g3g3g3g',
-  apple_url: 'https://music.apple.com/jp/album/夜に駆ける/1492477610?i=1492477611',
-  artist: artist2.name
-)
-
-Song.SongsController.add_song!(
-  name: 'アイドル',
-  source_url: 'https://storage.example.com/songs/idol.mp3',
-  picture_url: 'https://example.com/songs/idol/jacket.jpg',
-  spotify_url: 'https://open.spotify.com/track/1g1g1g1g1g1g1g1g1g1g1g',
-  apple_url: 'https://music.apple.com/jp/album/アイドル/1680292736?i=1680292737',
-  artist: artist2.name
-)
-
-Song.SongsController.add_song!(
-  name: '怪獣の花唄',
-  source_url: 'https://storage.example.com/songs/kaiju.mp3',
-  picture_url: 'https://example.com/songs/kaiju/jacket.jpg',
-  spotify_url: 'https://open.spotify.com/track/2g2g2g2g2g2g2g2g2g2g2g',
-  apple_url: 'https://music.apple.com/jp/album/怪獣の花唄/1512474135?i=1512474136',
-  artist: artist3.name
-)
 
 puts "#{Song.count} songs created."
 puts 'Seed data created successfully!'

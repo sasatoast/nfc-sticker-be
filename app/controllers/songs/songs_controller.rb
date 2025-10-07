@@ -1,5 +1,6 @@
 class Songs::SongsController < ApplicationController
-  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song, :create_song]
+  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song ]
+  # あとでここにcreate_song追加
   def show
     song_data = PlaySongService.call(
       song_id: params[:id],

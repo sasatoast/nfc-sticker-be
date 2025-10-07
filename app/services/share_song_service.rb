@@ -14,9 +14,9 @@ class ShareSongService
       password_setting = SongsPassword.find_by(song_id: song_id)
       if password_setting&.authenticate(password)
         song = UsersSong.create(user_id: user_id, song_id: song_id)
-        return [ :ok, song ]
+        [ :ok, song ]
       else
-        return [ :error, :wrong_password ]
+        [ :error, :wrong_password ]
       end
   end
 

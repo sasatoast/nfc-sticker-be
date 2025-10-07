@@ -1,5 +1,5 @@
 class Songs::SongsController < ApplicationController
-  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song]
+  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song ]
   def show
     song_data = PlaySongService.call(
       song_id: params[:id],
@@ -49,9 +49,9 @@ class Songs::SongsController < ApplicationController
     )
     case status
     when :ok
-      render json: { data: result}
+      render json: { data: result }
     when :error
-      render jdon: { data: result}
+      render jdon: { data: result }
     end
   end
 end

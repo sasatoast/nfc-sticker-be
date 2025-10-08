@@ -62,9 +62,9 @@ class Songs::SongsController < ApplicationController
       user_id: current_user.id
     )
     if songs_data.present?
-      render json: songs_data
+      render json: songs_data, status: :ok
     else
-      render json: { "message": "共有できる曲はまだありません" }
+      render json: { "message": "共有できる曲はまだありません" }, status: :ok
     end
   end
 
@@ -75,7 +75,14 @@ class Songs::SongsController < ApplicationController
     if songs_data.present?
       render json: songs_data
     else
-      render json: { "message": "まだ共有をしていません" }
+      render json: { "message": "まだ共有をしていません" }, status: :ok
     end
+  end
+
+  def show_share_ranking_by_artist_id
+    data = FetchShareRanking.call(
+      artist_id: params[:artist_id]
+    )
+    render json: { data: data }, status: :ok
   end
 end

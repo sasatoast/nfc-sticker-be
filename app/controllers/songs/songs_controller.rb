@@ -16,7 +16,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_shared_song
-    shared_song_data = SharedSongsService.call(
+    shared_song_data = FetchSharedSongsService.call(
       user_id: current_user&.id
     )
     if shared_song_data.present?

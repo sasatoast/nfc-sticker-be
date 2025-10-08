@@ -83,6 +83,6 @@ class Songs::SongsController < ApplicationController
     data = FetchShareRanking.call(
       artist_id: params[:artist_id]
     )
-    render json: { data: ranking }, status: :ok
+    render json: { data: data }, status: :ok
   end
 end

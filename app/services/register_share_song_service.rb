@@ -1,4 +1,4 @@
-class ShareSongService
+class RegisterShareSongService
   include Callable
   def initialize(user_id:, song_id:, password:)
       @user_id = user_id

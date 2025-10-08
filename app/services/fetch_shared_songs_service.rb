@@ -1,4 +1,4 @@
-class SharedSongsService
+class FetchSharedSongsService
   include Callable
   def initialize(user_id:)
     @user_id = user_id

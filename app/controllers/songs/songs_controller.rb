@@ -62,7 +62,7 @@ class Songs::SongsController < ApplicationController
       user_id: current_user.id
     )
     if songs_data.present?
-      render json: songs_data , status: :ok
+      render json: songs_data, status: :ok
     else
       render json: { "message": "共有できる曲はまだありません" }, status: :ok
     end

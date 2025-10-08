@@ -11,7 +11,7 @@ class FetchShareRanking
   def fetch_raking(artist_id)
     results = SharedCount
         .joins(:user, :song)
-        .where(songs: {artist_id: artist_id})
+        .where(songs: { artist_id: artist_id })
         .select(
           "users.name AS user_name,
           songs.name AS song_name,

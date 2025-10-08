@@ -1,6 +1,6 @@
 class Songs::SongsController < ApplicationController
   include Devise::Controllers::Helpers
-  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song, :show_sharable_song ]
+  before_action :authenticate_user!, only: [ :show_received_song, :register_sharable_song, :show_sharable_song, :show_shared_song ]
   # あとでここにcreate_song追加
   def show
     song_data = PlaySongService.call(
@@ -15,8 +15,8 @@ class Songs::SongsController < ApplicationController
     end
   end
 
-  def show_shared_song
-    shared_song_data = FetchSharedSongsService.call(
+  def show_received_song
+    shared_song_data = FetchReceivedSongsService.call(
       user_id: current_user&.id
     )
     if shared_song_data.present?
@@ -58,13 +58,24 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_sharable_song
-    songs_data = SharableSongsService.call(
+    songs_data = FetchSharableSongsService.call(
       user_id: current_user.id
     )
     if songs_data.present?
       render json: songs_data
     else
       render json: { "message": "共有できる曲はまだありません" }
+    end
+  end
+
+  def show_shared_song
+    songs_data = FetchSharedSongsService.call(
+      share_id: current_user.share_id
+    )
+    if songs_data.present?
+      render json: songs_data
+    else
+      render json: { "message": "まだ共有をしていません" }
     end
   end
 end

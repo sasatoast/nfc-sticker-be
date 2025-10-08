@@ -1,6 +1,6 @@
 class Songs::SongsController < ApplicationController
   include Devise::Controllers::Helpers
-  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song, :show_sharable_song]
+  before_action :authenticate_user!, only: [ :show_shared_song, :register_sharable_song, :show_sharable_song ]
   # あとでここにcreate_song追加
   def show
     song_data = PlaySongService.call(
@@ -64,8 +64,7 @@ class Songs::SongsController < ApplicationController
     if songs_data.present?
       render json: songs_data
     else
-      render json: {"message": "共有できる曲はまだありません"}
+      render json: { "message": "共有できる曲はまだありません" }
     end
   end
-
 end

@@ -23,7 +23,7 @@ module Artists
           }
         ]
       else
-        [:not_found, nil]
+        [ :not_found, nil ]
       end
     end
   end

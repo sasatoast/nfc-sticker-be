@@ -22,6 +22,62 @@ RSpec.configure do |config|
         version: 'v1'
       },
       paths: {},
+      components: {
+        schemas: {
+          SongDetailResponse: {
+            type: :object,
+            properties: {
+              id: {
+                type: :integer,
+                example: 1,
+                description: '楽曲ID'
+              },
+              source_url: {
+                type: :string,
+                example: 'https://storage.example.com/songs/pretender.mp3',
+                description: '音源(mp3)ファイルのURL'
+              },
+              picture_url: {
+                type: :string,
+                example: 'https://example.com/songs/pretender/jacket.jpg',
+                description: 'ジャケット画像のURL'
+              },
+              spotify_url: {
+                type: :string,
+                example: 'https://open.spotify.com/track/15n0n0gT5b6d5g4g3f4g3g',
+                description: 'Spotifyの楽曲リンク'
+              },
+              apple_url: {
+                type: :string,
+                example: 'https://music.apple.com/jp/album/pretender/1462432842?i=1462432845',
+                description: 'Apple Musicの楽曲リンク'
+              },
+              artist_name: {
+                type: :string,
+                example: 'Official髭男dism',
+                description: 'アーティスト名'
+              },
+              artist_id: {
+                type: :integer,
+                example: 1,
+                description: 'アーティストID（外部キー）'
+              }
+            },
+            required: %w[id source_url picture_url artist_id]
+          },
+
+          SongNotFoundError: {
+            type: :object,
+            properties: {
+              error: {
+                type: :string,
+                example: 'Song not found',
+                description: '楽曲が存在しない場合のエラーメッセージ'
+              }
+            }
+          }
+        }
+      },
       servers: [
         {
           url: 'https://{defaultHost}',

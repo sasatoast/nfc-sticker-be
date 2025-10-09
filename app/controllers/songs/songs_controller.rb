@@ -1,6 +1,6 @@
 class Songs::SongsController < ApplicationController
   include Devise::Controllers::Helpers
-  before_action :authenticate_user!, only: [ :show_received_song, :register_sharable_song, :show_sharable_song, :show_shared_song ]
+  skip_before_action :authenticate_user!, only: [ :show, :show_share_ranking_by_artist_id ]
   # あとでここにcreate_song追加
   def show
     song_data = Songs::PlaySongService.call(

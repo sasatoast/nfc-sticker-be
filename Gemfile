@@ -56,4 +56,3 @@ gem "devise-jwt", "~> 0.12.1"
 
 gem "rswag-api"
 gem "rswag-ui"
-gem "rswag-specs"

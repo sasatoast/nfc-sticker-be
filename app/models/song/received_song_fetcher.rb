@@ -1,5 +1,5 @@
-module Songs
-  class FetchReceivedSongsService
+class Song
+  class ReceivedSongFetcher
     include Callable
     def initialize(user_id:)
       @user_id = user_id

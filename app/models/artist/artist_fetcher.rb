@@ -1,5 +1,5 @@
-module Artists
-  class FetchArtistService
+class Artist
+  class ArtistFetcher
     include Callable
     def initialize(artist_id:)
       @artist_id = artist_id

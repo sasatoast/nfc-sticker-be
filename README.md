@@ -1,24 +1,12 @@
-# README
+## 立ち上げ方？
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 環境変数
 
-Things you may want to cover:
+## 開発方針
+### アーキテクチャ説明
+かくかくのディテクトリ図とディレクトリごとの説明
 
-* Ruby version
+モデルの振る舞いとサービスクラスの意図、コントローラー、サービスクラスの依存関係
 
-* System dependencies
+## swagger使ってます
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

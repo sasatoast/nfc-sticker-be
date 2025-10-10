@@ -1,5 +1,5 @@
-module Songs
-  class CreateSongWithPasswordService
+class Song
+  class SecureSongCreator
     include Callable
     def initialize(
       name:,

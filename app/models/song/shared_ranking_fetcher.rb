@@ -1,5 +1,5 @@
-module Songs
-  class FetchShareRanking
+class Song
+  class SharedRankingFetcher
     include Callable
     def initialize(artist_id:)
       @artist_id = artist_id

@@ -1,5 +1,5 @@
-module Songs
-  class PlaySongService
+class Song
+  class SongPlayer
     include Callable
       def initialize(song_id:, user_id: nil, share_id: nil)
         @song_id = song_id

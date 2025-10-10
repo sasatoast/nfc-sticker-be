@@ -1,5 +1,5 @@
-module Songs
-  class FetchSharedSongsService
+class Song
+  class SharedSongFetcher
     include Callable
     def initialize(share_id:)
       @share_id = share_id

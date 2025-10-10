@@ -3,7 +3,7 @@ class Songs::SongsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :show, :show_share_ranking_by_artist_id ]
   # あとでここにcreate_song追加
   def show
-    song_data = Songs::PlaySongService.call(
+    song_data = Song::SongPlayer.call(
       song_id: params[:id],
       share_id: params[:share_id],
       user_id: current_user&.id
@@ -16,7 +16,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_received_song
-    shared_song_data = Songs::FetchReceivedSongsService.call(
+    shared_song_data = Song::ReceivedSongFetcher.call(
       user_id: current_user&.id
     )
     if shared_song_data.present?
@@ -27,7 +27,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def register_sharable_song
-    status, result = Songs::RegisterShareSongService.call(
+    status, result = Song::SharableSongRegister.call(
       user_id: current_user&.id,
       song_id: params[:song_id],
       password: params[:password]
@@ -41,7 +41,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def create_song
-    status, result = Songs::CreateSongWithPasswordService.call(
+    status, result = Song::SecureSongCreator.call(
       name: params[:name],
       source_url: params[:source_url],
       picture_url: params[:picture_url],
@@ -58,7 +58,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_sharable_song
-    songs_data = Songs::FetchSharableSongsService.call(
+    songs_data = Song::SharableSongFetcher.call(
       user_id: current_user.id
     )
     if songs_data.present?
@@ -69,7 +69,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_shared_song
-    songs_data = Songs::FetchSharedSongsService.call(
+    songs_data = Song::SharedSongFetcher.call(
       share_id: current_user.share_id
     )
     if songs_data.present?
@@ -80,7 +80,7 @@ class Songs::SongsController < ApplicationController
   end
 
   def show_share_ranking_by_artist_id
-    data = Songs::FetchShareRanking.call(
+    data = Song::SharedRankingFetcher.call(
       artist_id: params[:artist_id]
     )
     render json: { data: data }, status: :ok

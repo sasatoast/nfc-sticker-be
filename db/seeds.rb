@@ -83,7 +83,7 @@ songs = [
 ]
 
 songs.each do |song_data|
-  status, result = CreateSongWithPasswordService.call(**song_data)
+  status, result = Song::SecureSongCreator.call(**song_data)
 
   if status == :ok
     puts "#{song_data[:name]} 登録完了 → パスワード: #{result}"

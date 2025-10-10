@@ -1,0 +1,26 @@
+module Api
+  module V1
+    class Users::SessionsController < Devise::SessionsController
+        include RackSessionFix
+        skip_before_action :authenticate_user!, only: [ :create ]
+        respond_to :json
+        private
+
+        def respond_with(resource, _opts = {})
+          render json: { message: "Logged in successfully.", user: resource }, status: :ok
+        end
+
+        def respond_to_on_destroy
+          current_user ? log_out_success : log_out_failure
+        end
+
+        def log_out_success
+          render json: { message: "Logged out successfully." }, status: :ok
+        end
+
+        def log_out_failure
+          render json: { message: "Logout failed." }, status: :unauthorized
+        end
+    end
+  end
+end

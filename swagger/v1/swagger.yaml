@@ -560,17 +560,28 @@ components:
       properties:
         song_id:
           type: integer
+          description: 楽曲の一意なID
+          example: 1
         song_name:
           type: string
+          description: 楽曲名
+          example: Pretender
         artist_name:
           type: string
+          description: アーティスト名
+          example: Official髭男dism
         picture_url:
           type: string
+          description: 楽曲の画像URL
+          example: https://example.com/image.jpg
         shared_count:
           type: integer
+          description: 楽曲が共有された回数
+          example: 123
         rank:
           type: integer
-
+          description: ランキング順位（1が最上位）
+          example: 1
     SongNotFoundError:
       type: object
       properties:

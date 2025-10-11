@@ -18,7 +18,7 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'API V1',
+        title: 'NFC Sticker Backend API',
         version: 'v1'
       },
       paths: {},

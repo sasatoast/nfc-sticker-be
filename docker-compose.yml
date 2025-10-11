@@ -1,16 +1,16 @@
 services:
-  # db:
-  #   image: postgres:15
-  #   container_name: rails-postgres
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: app_user
-  #     POSTGRES_PASSWORD: app_pass
-  #     POSTGRES_DB: app_development
-  #   ports:
-  #     - '5432:5432'
-  #   volumes:
-  #   - db_data:/var/lib/postgresql/data
+  db:
+    image: postgres:15
+    container_name: rails-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_pass
+      POSTGRES_DB: app_development
+    ports:
+      - '5432:5432'
+    volumes:
+    - db_data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -21,8 +21,8 @@ services:
     ports:
       - '3000:3000'
     # supabaseを使うときは依存しない
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
     env_file:
       - .env
 

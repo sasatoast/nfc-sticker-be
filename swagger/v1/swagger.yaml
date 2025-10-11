@@ -464,12 +464,20 @@ components:
           example: Pretender
         source_url:
           type: string
+          description: 楽曲の音源ファイルまたはストリーミングのURL
+          example: https://example.com/music/pretender.mp3
         picture_url:
           type: string
+          description: 楽曲のジャケット画像のURL
+          example: https://example.com/images/pretender.jpg
         spotify_url:
           type: string
+          description: 楽曲のSpotify上のURL
+          example: https://open.spotify.com/track/1234567890abcdef
         apple_url:
           type: string
+          description: 楽曲のApple Music上のURL
+          example: https://music.apple.com/jp/album/pretender/1234567890
         artist_name:
           type: string
           example: Official髭男dism

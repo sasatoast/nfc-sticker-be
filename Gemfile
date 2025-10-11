@@ -45,8 +45,14 @@ group :development, :test do
   gem "pry-rails"
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
+  gem "rswag-specs"
 end
 
 gem "devise", "~> 4.9"
 
 gem "devise-jwt", "~> 0.12.1"
+
+gem "rswag-api"
+gem "rswag-ui"

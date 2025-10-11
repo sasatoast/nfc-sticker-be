@@ -311,7 +311,7 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
 
   config.navigational_formats = []
-  config.skip_session_storage = [:http_auth, :params_auth]
+  config.skip_session_storage = [ :http_auth, :params_auth ]
 
   config.jwt do |jwt|
         jwt.secret = ENV["DEVISE_JWT_SECRET_KEY"]

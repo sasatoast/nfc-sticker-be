@@ -532,17 +532,29 @@ components:
       properties:
         id:
           type: integer
+          description: 楽曲の一意なID
+          example: 1
         name:
           type: string
+          description: 楽曲のタイトル
+          example: Pretender
         picture_url:
           type: string
+          description: 楽曲のジャケット画像のURL
+          example: https://example.com/images/pretender.jpg
         artist_name:
           type: string
+          description: アーティスト名
+          example: Official髭男dism
         is_password_protected:
           type: boolean
+          description: パスワードで保護されているかどうか
+          example: true
         created_at:
           type: string
           format: date-time
+          description: 楽曲が共有可能になった日時（ISO 8601形式）
+          example: 2023-12-01T12:34:56Z
 
     SongUnlockResponse:
       type: object

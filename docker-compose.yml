@@ -20,6 +20,7 @@ services:
       - .:/app
     ports:
       - '3000:3000'
+    # supabaseを使うときは依存しない
     depends_on:
       - db
     env_file:

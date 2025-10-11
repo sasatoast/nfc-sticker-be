@@ -1,0 +1,609 @@
+openapi: 3.0.1
+info:
+  title: NFC Sticker Backend API
+  version: v1
+  description: |
+    NFC Sticker Backend API - 楽曲共有プラットフォーム
+
+    このAPIは、NFCステッカーを通じて楽曲を共有するためのプラットフォームです。
+    ユーザーはステッカーを購入し楽曲固有のパスワードを手に入れ、パスワードで保護された楽曲を他のユーザーと共有できます。
+
+    ## 認証
+    JWT認証を使用しています。ログイン後、レスポンスヘッダーの `Authorization` フィールドに含まれるトークンを
+    後続のリクエストに含めてください。
+
+    ## エラーレスポンス
+    すべてのエラーレスポンスは以下の形式で返されます:
+    ```json
+    {
+      "error": "エラーメッセージ",
+      "error_code": "ERROR_CODE" // 場合によって
+    }
+    ```
+  contact:
+    name: NFC Sticker API Support
+    email: support@nfcsticker.com
+
+servers:
+  - url: https://{defaultHost}
+    variables:
+      defaultHost:
+        default: localhost:3000
+        description: サーバーのホスト名
+
+paths:
+  /signup:
+    post:
+      summary: ユーザー新規登録
+      tags: [Authentication]
+      description: 新しいユーザーアカウントを作成します
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                      example: user@example.com
+                    name:
+                      type: string
+                      example: 田中太郎
+                    password:
+                      type: string
+                      format: password
+                      example: password123
+                    password_confirmation:
+                      type: string
+                      format: password
+                      example: password123
+                  required: [email, name, password, password_confirmation]
+      responses:
+        '200':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Signed up successfully.
+                  user:
+                    $ref: '#/components/schemas/User'
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Signed up failure.
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      ['Email has already been taken', 'Password is too short']
+
+  /login:
+    post:
+      summary: ユーザーログイン
+      tags: [Authentication]
+      description: ユーザーアカウントにログインします
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                      example: user@example.com
+                    password:
+                      type: string
+                      format: password
+                      example: password123
+                  required: [email, password]
+      responses:
+        '200':
+          description: ログイン成功
+          headers:
+            Authorization:
+              description: JWT認証トークン
+              schema:
+                type: string
+                example: Bearer eyJhbGciOiJIUzI1NiJ9...
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged in successfully.
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /logout:
+    delete:
+      summary: ユーザーログアウト
+      tags: [Authentication]
+      description: ユーザーアカウントからログアウトします
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: ログアウト成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /player/songs/{id}:
+    get:
+      summary: 楽曲情報を取得
+      tags: [Songs]
+      description: |
+        楽曲情報を取得するAPIです。
+        - クエリに `share_id` を含めた場合、共有回数を自動的にカウントします。
+        - ログイン状態でアクセスした場合、共有曲として自動登録されます。
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Song ID
+          schema:
+            type: integer
+            example: 1
+        - name: share_id
+          in: query
+          description: 共有識別子(省略可)
+          schema:
+            type: string
+            example: a1b2c3d4e5f6g7h8
+      responses:
+        '200':
+          description: 楽曲情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongDetailResponse'
+        '404':
+          description: 楽曲が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongNotFoundError'
+
+  /users/received/songs:
+    get:
+      summary: 受信した共有楽曲一覧を取得
+      tags: [Songs]
+      security:
+        - BearerAuth: []
+      description: ユーザーが受信した共有楽曲の一覧を取得します
+      responses:
+        '200':
+          description: 受信楽曲一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shared_song_data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SharedSongData'
+                  message:
+                    type: string
+                    example: 共有された曲はまだありません
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /users/songs/{song_id}/unlock:
+    post:
+      summary: 共有楽曲のロック解除
+      tags: [Songs]
+      security:
+        - BearerAuth: []
+      description: パスワードで保護された共有楽曲のロックを解除します
+      parameters:
+        - name: song_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: Song ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: secret123
+                  description: 楽曲のロック解除用パスワード
+              required: [password]
+      responses:
+        '200':
+          description: ロック解除成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SongUnlockResponse'
+        '400':
+          description: エラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    example: INVALID_PASSWORD
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /songs:
+    post:
+      summary: 新規楽曲作成
+      tags: [Songs]
+      description: 新しい楽曲を作成します
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, source_url, picture_url, artist_name]
+              properties:
+                name:
+                  type: string
+                  example: Pretender
+                source_url:
+                  type: string
+                  example: https://storage.example.com/songs/pretender.mp3
+                picture_url:
+                  type: string
+                  example: https://example.com/songs/pretender/jacket.jpg
+                spotify_url:
+                  type: string
+                  example: https://open.spotify.com/track/15n0n0gT5b6d5g4g3f4g3g
+                apple_url:
+                  type: string
+                  example: https://music.apple.com/jp/album/pretender/1462432842?i=1462432845
+                artist_name:
+                  type: string
+                  example: Official髭男dism
+      responses:
+        '200':
+          description: 楽曲作成成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SongDetailResponse'
+
+  /users/songs:
+    get:
+      summary: 共有可能な楽曲一覧を取得
+      tags: [Songs]
+      security:
+        - BearerAuth: []
+      description: ユーザーが共有可能な楽曲の一覧を取得します
+      responses:
+        '200':
+          description: 共有可能楽曲一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  songs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SharableSongData'
+                  message:
+                    type: string
+                    example: 共有できる曲はまだありません
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /users/shared/songs:
+    get:
+      summary: 共有済み楽曲一覧を取得
+      tags: [Songs]
+      security:
+        - BearerAuth: []
+      description: ユーザーが共有済みの楽曲の一覧を取得します
+      responses:
+        '200':
+          description: 共有済み楽曲一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  songs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SharedSongData'
+                  message:
+                    type: string
+                    example: まだ共有をしていません
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /ranking/{artist_id}:
+    get:
+      summary: アーティスト別共有ランキング取得
+      tags: [Songs]
+      description: 指定されたアーティストの楽曲の共有ランキングを取得します
+      parameters:
+        - name: artist_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: ランキング取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SongRankingData'
+
+  /artists/{artist_id}:
+    get:
+      summary: アーティスト情報を取得
+      tags: [Artists]
+      description: 指定されたアーティストの詳細情報を取得します
+      parameters:
+        - name: artist_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: アーティスト情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDetailResponse'
+        '404':
+          description: アーティストが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistNotFoundError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT認証トークンを使用してください
+
+  responses:
+    UnauthorizedError:
+      description: 認証エラー
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: You need to sign in or sign up before continuing.
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        name:
+          type: string
+          example: 田中太郎
+        share_id:
+          type: string
+          example: a1b2c3d4e5f6g7h8
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    SongDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Pretender
+        source_url:
+          type: string
+          description: 楽曲の音源ファイルまたはストリーミングのURL
+          example: https://example.com/music/pretender.mp3
+        picture_url:
+          type: string
+          description: 楽曲のジャケット画像のURL
+          example: https://example.com/images/pretender.jpg
+        spotify_url:
+          type: string
+          description: 楽曲のSpotify上のURL
+          example: https://open.spotify.com/track/1234567890abcdef
+        apple_url:
+          type: string
+          description: 楽曲のApple Music上のURL
+          example: https://music.apple.com/jp/album/pretender/1234567890
+        artist_name:
+          type: string
+          example: Official髭男dism
+        artist_id:
+          type: integer
+          example: 1
+
+    ArtistDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Official髭男dism
+        spotify_url:
+          type: string
+          example: https://open.spotify.com/artist/24jgrM1lFxS2I3Up9gQrXj
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    SharedSongData:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        source_url:
+          type: string
+        picture_url:
+          type: string
+        spotify_url:
+          type: string
+        apple_url:
+          type: string
+        artist_name:
+          type: string
+        shared_count:
+          type: integer
+        shared_at:
+          type: string
+          format: date-time
+
+    SharableSongData:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 楽曲の一意なID
+          example: 1
+        name:
+          type: string
+          description: 楽曲のタイトル
+          example: Pretender
+        picture_url:
+          type: string
+          description: 楽曲のジャケット画像のURL
+          example: https://example.com/images/pretender.jpg
+        artist_name:
+          type: string
+          description: アーティスト名
+          example: Official髭男dism
+        is_password_protected:
+          type: boolean
+          description: パスワードで保護されているかどうか
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          description: 楽曲が共有可能になった日時（ISO 8601形式）
+          example: 2023-12-01T12:34:56Z
+
+    SongUnlockResponse:
+      type: object
+      properties:
+        song:
+          $ref: '#/components/schemas/SongDetailResponse'
+        message:
+          type: string
+        unlocked_at:
+          type: string
+          format: date-time
+
+    SongRankingData:
+      type: object
+      properties:
+        song_id:
+          type: integer
+          description: 楽曲の一意なID
+          example: 1
+        song_name:
+          type: string
+          description: 楽曲名
+          example: Pretender
+        artist_name:
+          type: string
+          description: アーティスト名
+          example: Official髭男dism
+        picture_url:
+          type: string
+          description: 楽曲の画像URL
+          example: https://example.com/image.jpg
+        shared_count:
+          type: integer
+          description: 楽曲が共有された回数
+          example: 123
+        rank:
+          type: integer
+          description: ランキング順位（1が最上位）
+          example: 1
+    SongNotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Song not found
+
+    ArtistNotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Artist not found

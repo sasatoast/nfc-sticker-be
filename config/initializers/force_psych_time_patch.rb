@@ -1,5 +1,5 @@
 # config/initializers/force_psych_time_patch.rb
-require 'yaml'
+require "yaml"
 
 module YAML
   class << self

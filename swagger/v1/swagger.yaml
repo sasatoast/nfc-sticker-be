@@ -494,21 +494,26 @@ components:
     ArtistDetailResponse:
       type: object
       properties:
-        id:
-          type: integer
-          example: 1
         name:
           type: string
+          description: アーティスト名
           example: Official髭男dism
+        picture_url:
+          type: string
+          description: アーティストの画像URL
+          example: https://example.com/images/artist.jpg
         spotify_url:
           type: string
+          description: アーティストのSpotify上のURL
           example: https://open.spotify.com/artist/24jgrM1lFxS2I3Up9gQrXj
-        created_at:
+        apple_url:
           type: string
-          format: date-time
-        updated_at:
+          description: アーティストのApple Music上のURL
+          example: https://music.apple.com/jp/artist/1234567890
+        homepage_url:
           type: string
-          format: date-time
+          description: アーティストの公式ホームページURL
+          example: https://example-artist.com
 
     SharedSongData:
       type: object

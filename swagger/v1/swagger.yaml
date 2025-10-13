@@ -215,7 +215,8 @@ paths:
                     properties:
                       shared_song_data:
                         type: array
-                        items: {}
+                        items:
+                          $ref: '#/components/schemas/ReceivedSongData'
                       message:
                         type: string
                         example: 共有された曲はまだありません

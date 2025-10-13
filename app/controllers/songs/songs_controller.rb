@@ -36,7 +36,7 @@ class Songs::SongsController < ApplicationController
     when :ok
       render json: { data: result }
     when :error
-      render json: { error_code: result }
+      render json: { error_code: result }, status: :unprocessable_entity
     end
   end
 
@@ -53,7 +53,7 @@ class Songs::SongsController < ApplicationController
     when :ok
       render json: { data: result }
     when :error
-      render json: { data: result }
+      render json: { error_code: result }, status: :unprocessable_entity
     end
   end
 

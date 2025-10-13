@@ -260,8 +260,8 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/UsersSong'
-        '400':
-          description: エラー
+        '422':
+          description: バリデーションエラー
           content:
             application/json:
               schema:
@@ -316,6 +316,16 @@ paths:
                     type: string
                     description: 生成されたパスワード
                     example: a1b2c3d4
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    example: validation_error
 
   /users/songs:
     get:

@@ -25,6 +25,7 @@ class Song
         return nil unless song
           {
             id: song.id,
+            name: song.name,
             source_url: song.source_url,
             picture_url: song.picture_url,
             spotify_url: song.spotify_url,

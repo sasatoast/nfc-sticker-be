@@ -85,4 +85,12 @@ class Songs::SongsController < ApplicationController
     )
     render json: { data: data }, status: :ok
   end
+
+  def generate_share_url
+    url = Song::ShareUrlGenerator.call(
+      song_id: params[:song_id],
+      share_id: current_user.share_id
+    )
+    render json: { url: url }, status: :ok
+  end
 end

@@ -11,7 +11,7 @@ class Song
     end
 
     def generate_share_url(song_id, share_id)
-      "https://localhost:3001/player/#{song_id}?share_id=#{share_id}"
+      "https://nfc-sticker.vercel.app/player/#{song_id}?share_id=#{share_id}"
     end
   end
 end

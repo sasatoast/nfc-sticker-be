@@ -1,0 +1,36 @@
+# fly.toml app configuration file generated for nfc-sticker-be
+# fly.io最安プラン設定
+
+app = 'nfc-sticker-be'
+primary_region = 'nrt' # 東京リージョン
+
+[build]
+  dockerfile = "Dockerfile.fly"
+
+[deploy]
+  release_command = 'bin/rails db:migrate'
+
+[env]
+  RAILS_ENV = 'production'
+  RAILS_LOG_TO_STDOUT = 'true'
+  RAILS_SERVE_STATIC_FILES = 'true'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  max_machines_running = 1
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 25
+    soft_limit = 20
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
+

@@ -1,45 +1,43 @@
-# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+# Dockerビルドから除外するファイル
+# 必要に応じてコメントアウトを外してください
 
-# Ignore git directory.
-/.git/
-/.gitignore
+# Git
+.git
+.gitignore
 
-# Ignore bundler config.
-/.bundle
+# Logs（本番環境では不要）
+log/*
+tmp/*
+!log/.keep
+!tmp/.keep
 
-# Ignore all environment files.
-/.env*
+# Environment（本番では環境変数で管理）
+.env
+.env.*
 
-# Ignore all default key files.
-/config/master.key
-/config/credentials/*.key
+# Node modules（本番では不要）
+# node_modules/
 
-# Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
-!/log/.keep
-!/tmp/.keep
+# Test files（本番では不要）
+test/
+spec/
+coverage/
 
-# Ignore pidfiles, but keep the directory.
-/tmp/pids/*
-!/tmp/pids/.keep
+# Documentation（本番では不要）
+# README.md
+# swagger/
 
-# Ignore storage (uploaded files in development and any SQLite databases).
-/storage/*
-!/storage/.keep
-/tmp/storage/*
-!/tmp/storage/.keep
+#tuho Development files（本番では不要）
+# .github/
+# .vscode/
+# .idea/
 
-# Ignore CI service files.
-/.github
+# Storage（本番では外部ストレージ推奨）
+# storage/*
+# !storage/.keep
 
-# Ignore Kamal files.
-/config/deploy*.yml
-/.kamal
-
-# Ignore development files
-/.devcontainer
-
-# Ignore Docker-related files
-/.dockerignore
-/Dockerfile*
+# Temp files
+*.swp
+*.swo
+*~
+.DS_Store

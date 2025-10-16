@@ -14,15 +14,140 @@ https://github.com/sasatoast/nfc-sticker-fe
 - Deployment: Fly.io
 - Authentication: Devise + DeviceJWT
 - Documentation: Rswag (Swagger UI)
+
 ## 開発方針
+Serviceクラスを実装し、
+- Model: モデル単体のビジネスロジック、依存関係を定義
+- Controller: HTTPレスポンスの管理
+- Service: 複数モデルにまたがるデータ取得・変換ロジックと、アプリケーションロジックの定義
+
+とすることで、MVCで発生するFatModelやFatControllerを避け、ディレクトリごとの責務を分離するようにしました。
+ServiceクラスはServiceディレクトリを切らず、RailsはModelに処理を書くという思想があることを汲み、modelの下に名前空間を作り、サブモデルのような形で切り出しました。
+Serviceクラスの実装で意識したのは
+
+ **`call`メソッドにControllerとServiceクラスのインスタンスメソッドが依存するようにしたこと** です。
+ 
+models/concernにCallbleモジュールを定義し、ここでServiceクラス`call`が呼ばれた時に新しくインスタンスが生成されるようにしました。
+また、Serviceクラス内の`call`では定義したインスタンスメソッドを元にアプリケーションロジックを定義しています。
+こうすることでControllerはServiceクラスの中身を知る必要はなく、Serviceクラス（正確に言えばクラスないのインスタンスメソッド）もControllerの変更影響を受けずに済みます。
+
+例
+```
+# songs_controller.rb
+def register_sharable_song
+    status, result = Song::SharableSongRegister.call(
+      user_id: current_user&.id,
+      song_id: params[:song_id],
+      password: params[:password]
+    )
+    case status
+    when :ok
+      render json: { data: result }
+    when :error
+      render json: { error_code: result }, status: :unprocessable_entity
+    end
+  end
+------------------------
+
+# models/concerns/Callable.rb
+module Callable
+  extend ActiveSupport::Concern
+  # concernで切り出すか、applicationService作ってまとめるかは要検討
+  class_methods do
+    def call(*args, **kwargs, &block)
+      new(*args, **kwargs, &block).call
+    end
+  end
+end
+------------------------
+# models/song/sharable_song_register.rb
+class Song
+  class SharableSongRegister
+    include Callable
+    def initialize(user_id:, song_id:, password:)
+        @user_id = user_id
+        @song_id = song_id
+        @password = password
+    end
+
+    def call
+      register_song(@user_id, @song_id, @password)
+    end
+
+    def register_song(user_id, song_id, password)
+        password_setting = SongsPassword.find_by(song_id: song_id)
+        if password_setting&.authenticate(password)
+          song = UsersSong.create!(user_id: user_id, song_id: song_id)
+          [ :ok, song ]
+        else
+          [ :error, :wrong_password ]
+        end
+    end
+  end
+end
+```
+Serviceクラスの命名は例にもあるように **名詞+アクション**　で命名しており、何をどうするのかというのが一目でわかる命名にしました。
 
 ### アーキテクチャ説明
+アーキテクチャとしてはMVC+Service(?)である。この設計にした理由としては、LaravelやDjangoで導入されるMVC+Repostiroy+Serivceに触れる機会が多くあり、どの場所に何を描けばいいのかという点が明確であったためRailsでも実装してみようと考えたからです。
 
-かくかくのディテクトリ図とディレクトリごとの説明
-
-モデルの振る舞いとサービスクラスの意図、コントローラー、サービスクラスの依存関係
+```
+nfc-sticker-be/
+├── app/                    # アプリケーションのメインコード
+│   ├── controllers/        # APIエンドポイントの制御
+│   │   ├── application_controller.rb
+│   │   ├── artists/        # アーティスト関連API
+│   │   ├── songs/          # 楽曲関連API
+│   │   ├── users/          # ユーザー関連API
+│   │   └── concerns/       # コントローラー共通処理
+│   ├── models/             # データモデル・ビジネスロジック
+│   │   ├── application_record.rb
+│   │   ├── artist.rb       # アーティストモデル
+│   │   ├── song.rb         # 楽曲モデル
+│   │   ├── user.rb         # ユーザーモデル
+│   │   ├── jwt_denylist.rb # JWT認証管理
+│   │   ├── shared_count.rb # 共有回数管理
+│   │   ├── songs_password.rb # 楽曲パスワード
+│   │   ├── users_shared_song.rb # ユーザー楽曲共有
+│   │   ├── users_song.rb   # ユーザー楽曲関連
+│   │   ├── artist/         # アーティスト関連サブモデル
+│   │   ├── song/           # 楽曲関連サブモデル
+│   │   └── concerns/       # モデル共通処理
+│   ├── jobs/               # バックグラウンドジョブ
+│   ├── mailers/            # メール送信処理
+│   └── views/              # ビューテンプレート
+├── config/                 # 設定ファイル
+│   ├── application.rb      # アプリケーション設定
+│   ├── database.yml        # データベース設定
+│   ├── routes.rb           # ルーティング設定
+│   ├── environments/       # 環境別設定
+│   ├── initializers/       # 初期化設定
+│   └── locales/            # 国際化ファイル
+├── db/                     # データベース関連
+│   ├── schema.rb           # データベーススキーマ
+│   ├── seeds.rb            # 初期データ
+│   └── migrate/            # マイグレーションファイル
+├── spec/                   # テストファイル（RSpec）
+│   ├── requests/           # APIテスト
+│   └── swagger_helper.rb   # Swagger設定
+├── swagger/                # API仕様書
+├── docs/                   # ドキュメント
+├── lib/                    # ライブラリ・タスク
+├── bin/                    # 実行可能ファイル
+├── public/                 # 静的ファイル
+├── scripts/                # スクリプトファイル
+├── tmp/                    # 一時ファイル
+├── vendor/                 # 外部ライブラリ
+├── Gemfile                 # Ruby依存関係
+├── Dockerfile              # Docker設定
+├── docker-compose.yml      # Docker Compose設定
+└── fly.toml                # Fly.io設定
+```
 
 ## セットアップ手順
+`docker compose build`
+`docker compose up -d`
+でセットアップできます。
 
 
 ## 環境変数
@@ -73,8 +198,13 @@ fly secrets set DATABASE_URL="..." SECRET_KEY_BASE="..." DEVISE_JWT_SECRET_KEY="
 https://nfc-sticker-be.fly.dev/api-docs/index.html
 
 ## デプロイ
+`fly deploy`
 
 ## コマンド一覧
+コンテナ内で操作することが多いと思います。
+`docker compose exec web`
+で操作してください。
+
 
 ## トラブルシューティング
 - 本番環境でバックエンドが応答しない時、マイグレーションができない時はfly.ioのマシンのメモリが足りない可能性があります。一時的に増やしてみてください

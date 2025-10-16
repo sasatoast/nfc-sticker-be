@@ -81,5 +81,3 @@ https://nfc-sticker-be.fly.dev/api-docs/index.html
 - 開発環境におけるdatabase.ymlを編集しています。DBとの接続がうまくいかない時は過去のコミット履歴を参照に修正してください。理由は環境変数の項目に記載しています
   
 
-
-## フロントエンドリポジトリ

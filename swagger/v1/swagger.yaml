@@ -428,6 +428,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/ArtistNotFoundError'
 
+  /artists/shared:
+    get:
+      summary: 共有されたアーティスト一覧を取得
+      tags: [Artists]
+      security:
+        - BearerAuth: []
+      description: ユーザーが受信した共有楽曲のアーティスト一覧を取得します
+      responses:
+        '200':
+          description: 共有アーティスト一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SharedArtistData'
+        '404':
+          description: 共有されたアーティストが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistNotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   /songs/{song_id}/share_url:
     get:
       summary: 楽曲の共有URL生成
@@ -683,3 +708,19 @@ components:
         error:
           type: string
           example: Artist not found
+
+    SharedArtistData:
+      type: object
+      properties:
+        artist_id:
+          type: integer
+          description: アーティストの一意なID
+          example: 1
+        artist_name:
+          type: string
+          description: アーティスト名
+          example: Official髭男dism
+        artist_picture_url:
+          type: string
+          description: アーティストの画像URL
+          example: https://example.com/artist.jpg

@@ -19,4 +19,5 @@ Rails.application.routes.draw do
       get "ranking/:artist_id", to: "songs/songs#show_share_ranking_by_artist_id"
       get "artists/:artist_id", to: "artists/artists#show_artist"
       get "songs/:song_id/share_url", to: "songs/songs#generate_share_url"
+      get "artists/shared", to: "artists/artists#index_shared_artist"
 end

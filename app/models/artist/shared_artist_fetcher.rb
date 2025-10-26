@@ -12,7 +12,7 @@ class Artist
     def fetch_shared_artist(user_id)
       shared_artists_ids = UsersSharedSong.where(user_id: user_id).pluck(:artist_id)
       artists = Artist.where(id: shared_artists_ids)
-      
+
       if artists.empty?
         [ :not_found, nil ]
       else

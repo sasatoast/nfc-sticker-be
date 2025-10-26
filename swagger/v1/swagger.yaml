@@ -444,6 +444,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SharedArtistData'
+        '404':
+          description: 共有されたアーティストが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistNotFoundError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 

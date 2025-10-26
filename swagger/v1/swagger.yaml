@@ -714,3 +714,7 @@ components:
           type: string
           description: アーティスト名
           example: Official髭男dism
+        artist_picture_url:
+          type: string
+          description: アーティストの画像URL
+          example: https://example.com/artist.jpg

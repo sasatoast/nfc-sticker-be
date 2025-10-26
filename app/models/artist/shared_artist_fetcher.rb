@@ -15,7 +15,8 @@ class Artist
       result = artists.map do |artist|
         {
           artist_id: artist.id,
-          artist_name: artist.name
+          artist_name: artist.name,
+          artist_picture_url: artist.picture_url
         }
       end
       [ :ok, result ]

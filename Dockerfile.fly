@@ -1,0 +1,35 @@
+# Fly.io用の最適化されたDockerfile
+FROM ruby:3.4.4-slim
+
+# 必要なパッケージのインストール
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    postgresql-client \
+    libpq-dev \
+    libyaml-dev \
+    nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Gemfileのコピーとインストール
+COPY Gemfile Gemfile.lock ./
+RUN bundle config set --local deployment 'true' && \
+    bundle config set --local without 'development test' && \
+    bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# アプリケーションコードのコピー
+COPY . .
+
+# アセットのプリコンパイル（必要な場合）
+# RUN bundle exec rails assets:precompile
+
+# 一時ファイルのクリーンアップ
+RUN rm -rf tmp/* log/*
+
+EXPOSE 3000
+
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+

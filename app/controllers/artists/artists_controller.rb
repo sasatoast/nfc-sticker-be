@@ -12,4 +12,16 @@ class Artists::ArtistsController < ApplicationController
       render json: { error: "Artist not found" }, status: :not_found
     end
   end
+
+  def index_shared_artist
+    status, result = Artist::SharedArtistFetcher.call(
+      user_id: current_user.id
+    )
+    case status
+    when :ok
+      render json: result
+    when :not_found
+      render json: { error: "Artist not found" }, status: :not_found
+    end
+  end
 end

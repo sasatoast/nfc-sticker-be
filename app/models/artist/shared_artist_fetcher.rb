@@ -10,8 +10,10 @@ class Artist
     end
 
     def fetch_shared_artist(user_id)
-      shared_artists_ids = UsersSharedSong.where(user_id: user_id).pluck(:artist_id)
-      artists = Artist.where(id: shared_artists_ids)
+      artists = Artist
+        .joins(songs: :users_shared_songs)
+        .where(users_shared_songs: { user_id: user_id })
+        .distinct
 
       if artists.empty?
         [ :not_found, nil ]

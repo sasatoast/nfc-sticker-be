@@ -10,7 +10,6 @@ class Artist
     end
 
     def fetch_shared_artist(user_id)
-      # JOINを使用して1つのクエリで効率的に取得
       artists = Artist
         .joins(songs: :users_shared_songs)
         .where(users_shared_songs: { user_id: user_id })

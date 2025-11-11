@@ -7,7 +7,7 @@ class Supabase::SignedUrlGenerator
     @expires_in = expires_in.to_i
   end
 
-  def self.call(file_path, bucket: 'songs', expires_in: 15.minutes)
+  def self.call(file_path, bucket: "songs", expires_in: 15.minutes)
     new(file_path, bucket, expires_in).generate
   end
 
@@ -24,7 +24,7 @@ class Supabase::SignedUrlGenerator
 
     if response.success?
 
-      signed_path = response.parsed_response['signedURL']
+      signed_path = response.parsed_response["signedURL"]
 
       "#{SupabaseClient::SUPABASE_URL}#{signed_path}"
     else
@@ -42,14 +42,14 @@ class Supabase::SignedUrlGenerator
   private
 
   def extract_storage_path(url)
-    return url unless url.start_with?('http')
+    return url unless url.start_with?("http")
 
     uri = URI.parse(url)
-    path_parts = uri.path.split('/')
+    path_parts = uri.path.split("/")
 
-    bucket_index = path_parts.index('public') || path_parts.index('sign')
+    bucket_index = path_parts.index("public") || path_parts.index("sign")
     if bucket_index
-      path_parts[(bucket_index + 2)..-1].join('/')
+      path_parts[(bucket_index + 2)..-1].join("/")
     else
       url
     end
@@ -58,4 +58,3 @@ class Supabase::SignedUrlGenerator
     url
   end
 end
-

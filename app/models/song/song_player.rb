@@ -16,10 +16,10 @@ class Song
         if @user_id.present?
           save_shared_song
         end
-        
+
         song[:source_url] = generate_signed_url(song[:source_url])
         song[:picture_url] = generate_signed_url(song[:picture_url]) if song[:picture_url].present?
-        
+
         song
       end
 
@@ -55,10 +55,10 @@ class Song
           )
         shared_song.save
       end
-      
+
       def generate_signed_url(file_path)
         return nil if file_path.blank?
-        
+
         Supabase::SignedUrlGenerator.call(file_path, expires_in: 15.minutes)
       rescue => e
         Rails.logger.error "Failed to generate signed URL for #{file_path}: #{e.message}"

@@ -49,7 +49,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
 
-  gem 'dotenv-rails'
+  gem "dotenv-rails"
 end
 
 gem "devise", "~> 4.9"
@@ -59,4 +59,4 @@ gem "devise-jwt", "~> 0.12.1"
 gem "rswag-api"
 gem "rswag-ui"
 
-gem 'httparty'
+gem "httparty"

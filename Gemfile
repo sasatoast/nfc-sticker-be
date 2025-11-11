@@ -39,7 +39,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  # Static analysis for securi ty vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
   gem "pry-rails"
@@ -48,6 +48,8 @@ group :development, :test do
 
   gem "rspec-rails"
   gem "rswag-specs"
+
+  gem "dotenv-rails"
 end
 
 gem "devise", "~> 4.9"
@@ -56,3 +58,5 @@ gem "devise-jwt", "~> 0.12.1"
 
 gem "rswag-api"
 gem "rswag-ui"
+
+gem "httparty"

@@ -37,8 +37,6 @@ nfc-sticker-be/
 │   │   ├── song/           # 楽曲関連のServiceクラス(サブモデル）
 │   │   └── concerns/       # モデル共通処理
 │   ├── jobs/               # バックグラウンドジョブ
-│   ├── mailers/            # メール送信処理
-│   └── views/              # ビューテンプレート
 
 ```
 
